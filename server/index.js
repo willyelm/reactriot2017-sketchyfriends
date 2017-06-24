@@ -20,6 +20,7 @@ serve.listen(8000,()=> {console.log("server listening on port 8000")})
 
 var correctAnswer = 5;
 var goodDraw = 2;
+var TIME;
 
 class Room {
 	constructor(CODE, player) {
@@ -30,6 +31,7 @@ class Room {
 		this.player1.sketchy = true
 		this.player2 = null;
 		this.player1.points = 0;
+		this.timer;
 
 		this.player1.send({ OP: 'CREATE', CODE,  SKETCHY: true });
 	}
@@ -45,6 +47,25 @@ class Room {
 
 		this.player2.emit('message', { OP: 'JOIN', success, SKETCHY: false });
 		this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
+	}
+
+	timer(player) {
+		return function() {
+			if(!player.room.pauseTimer) {
+    	  		player.room.count=player.room.count-1;
+    			TIME = player.room.count;
+    		}
+    		if (player.room.count <= 0) {
+    		  	clearInterval(player.room.counter);
+    		  	TIME = null;
+    		  	player.room.player1.emit('message', { OP: 'TIMER', TIME });
+    			player.room.player2.emit('message', { OP: 'TIMER', TIME });
+    		  	return;
+    		}
+    		player.room.player1.emit('message', { OP: 'TIMER', TIME });
+    		player.room.player2.emit('message', { OP: 'TIMER', TIME });
+		}
+    	
 	}
 
 	playerSketched(player, data) {
@@ -65,6 +86,8 @@ class Room {
 	emitNewWord(player, WORD) {
 		this.player1.emit('message', { OP: 'NEW_WORD', WORD });
 		this.player2.emit('message', { OP: 'NEW_WORD', WORD });
+		this.count = 10;
+		this.counter = setInterval(this.timer(player), 1000);
 	}
 
 	setSketchyPerson(player) {
@@ -75,7 +98,8 @@ class Room {
 	}
 
 	givePoints(player) {
-
+		clearInterval(this.counter);
+		
 		switch(player) {
 			case this.player1:
 				this.player1.points += correctAnswer;
@@ -93,6 +117,7 @@ class Room {
 				break;
 		}
 	}
+
 }
 
 var rooms = {};

@@ -15,11 +15,10 @@ class Game extends Component {
       word: null,
       sketchy: this.props.sketchy,
       points: 0,
-      opponent_points: 0
+      opponent_points: 0,
+      time: null
     }
     this.count = 3;
-    this.drawCount = 10;
-    this.pauseTimer = false;
 
     this.props.socket.on('message', data => {
       console.log(data)
@@ -27,8 +26,6 @@ class Game extends Component {
         case 'NEW_WORD':
           this.props.set_new_word(data.WORD);
           this.setState({ word: data.WORD });
-          this.setState({ drawCount: 10 });
-          this.drawCounter = setInterval(this.drawTimer.bind(this), 1000);
           break;
         case 'SKETCHY_PLAYER':
           this.props.set_sketchy_friend(data.SKETCHY);
@@ -48,10 +45,17 @@ class Game extends Component {
           break;
         case 'CORRECT_ANSWER':
           this.setState({
-            points: data.POINTS,
-            opponent_points: data.OPPONENT_POINTS
+            time: data.TIME
           });
           this.correctAnswer = true;
+          break;
+        case 'TIMER':
+          this.setState({
+            time: data.TIME,
+          });
+          if(this.state.time === null && this.state.sketchy) {
+            this.props.socket.emit('message', { OP: 'END_ROUND' });
+          }
           break;
         default:
           break;
@@ -77,22 +81,6 @@ class Game extends Component {
     this.setState({ gameCountDown: this.count });
   }
 
-  drawTimer() {
-    console.log('start timer')
-    this.drawCount=this.drawCount-1;
-    if (this.drawCount <= 0) {
-      clearInterval(this.drawCounter);
-      this.drawCount = null;
-      this.setState({ drawCountDown: this.drawCount });
-      if(!this.props.sketchy) {
-        console.log('round end')
-        this.props.socket.emit('message', { OP: 'END_ROUND' });
-      }
-      return;
-    }
-    this.setState({ drawCountDown: this.drawCount });
-  }
-
   handleChange(e) {
     this.setState({ input: e.target.value });
   }
@@ -100,7 +88,6 @@ class Game extends Component {
   checkAnswer() {
     if(this.state.input.toLowerCase() === this.state.word) {
       this.props.socket.emit('message', {  OP: 'CORRECT_ANSWER' });
-      clearInterval(this.drawCounter);
     }
   }
 
@@ -111,8 +98,8 @@ class Game extends Component {
         <div className={ this.state.gameCountDown === null ? "hidden" : "" }>
           <p>Game starts in { this.state.gameCountDown }</p>
         </div>
-        <div className={ this.state.drawCountDown === null ? "hidden" : "" }>
-          <p>{ this.state.drawCountDown }</p>
+        <div className={ this.state.time === null ? "hidden" : "" }>
+          <p>{ this.state.time }</p>
         </div>
         <div className={ this.state.goodDraw ? "" : "hidden" }>
           <p>You're an artist!</p>
