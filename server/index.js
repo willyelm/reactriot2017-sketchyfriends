@@ -6,13 +6,34 @@ var serve = http.createServer(app);
 var io = socketServer(serve);
 serve.listen(8000,()=> {console.log("server listening on port 8000")})
 
+class Player {
+
+	constructor(room, client, playerNumber) {
+		this.client = client;
+		this.client.room = room;
+		this.room = room;
+		this.playerNumber = playerNumber;
+	}
+}
 
 class Room {
 	constructor(CODE, client) {
 		this.code = CODE;
 		this.player1 = client;
+		console.log(this.player1)
+		this.player2 = null;
 
 		this.player1.send({ OP: 'CREATE', CODE });
+	}
+
+	playerJoined(client) {
+		var success = true;
+		// this.player2 = new Player(this, client, 2);
+		this.player2 = client;
+		this.player2.number = 2;
+		this.player2.room = this;
+		this.player2.emit('message', { OP: 'JOIN', success });
+		this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
 	}
 }
 
@@ -34,6 +55,14 @@ var game = {
 	createRoom: function(host) {
 		var code = generateCode();
 		rooms[code] = new Room(code, host);
+	},
+	joinRoom: function(opponent, code) {
+		if(!rooms.hasOwnProperty(code)) {
+			var success = false;
+			var reason = 'Room ' + code + ' does not exist.';
+			opponent.send({ OP: 'JOIN', success, reason });
+		}
+		rooms[code].playerJoined(opponent);
 	}
 }
 
@@ -65,6 +94,7 @@ io.on('connection', function (socket) {
 
 			case 'JOIN': {
 				console.log('joining game');
+				game.joinRoom(socket, data.code);
 				break;
 			}
 		}
