@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from '../node_modules/react-sketchpad/lib/index';
+import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from '../../node_modules/react-sketchpad/lib/index';
 
 class Canvas extends Component {
 

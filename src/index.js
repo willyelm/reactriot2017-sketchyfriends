@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import Menu from './Menu';
-import Game from './Game';
+import Menu from './menu/Menu';
+import Game from './game/Game';
 import Lobby from './lobby/Lobby';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
