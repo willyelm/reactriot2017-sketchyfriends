@@ -4,6 +4,7 @@ export const CREATE_ROOM = 'CREATE_ROOM';
 export const JOIN_ROOM = 'JOIN_ROOM';
 export const SET_NEW_WORD = 'SET_NEW_WORD';
 export const SET_SOCKET = 'SET_SOCKET';
+export const DRAW_POINTS = 'DRAW_POINTS';
 
 const initialState = {
   room: null,

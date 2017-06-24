@@ -17,11 +17,9 @@ class Game extends Component {
     this.count = 3;
 
     this.props.socket.on('message', data => {
-      console.log(data);
       switch(data.OP) {
         case 'NEW_WORD':
           this.props.set_new_word(data.WORD);
-          console.log(this.props)
           this.setState({ word: data.WORD });
           break;
         default:
@@ -49,14 +47,13 @@ class Game extends Component {
   }
 
   handleChange(e) {
-    // this.setState({ input: e.target.value });
+    this.setState({ input: e.target.value });
   }
 
-  handleClick() {
-    // this.setState({
-    //   guess: this.state.input,
-    //   input: ''
-    // });
+  checkAnswer() {
+    if(this.state.input.toLowerCase() === this.state.word) {
+      console.log('correct')
+    }
   }
 
   render() {
@@ -70,8 +67,8 @@ class Game extends Component {
         <p className={ this.props.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         <Canvas />
         <p>{ this.state.guess }</p>
-        <input type="text" onChange={ this.handleChange.bind(this) } value={ this.state.input } className={ this.props.sketchy ? "hidden" : "" }/>
-        <button onClick={ this.handleClick.bind(this) } type="button" className={ this.props.sketchy ? "hidden" : "" }>Submit</button>
+        <input type="text" onChange={ this.handleChange.bind(this) } className={ this.props.sketchy ? "hidden" : "" }/>
+        <button onClick={ this.checkAnswer.bind(this) } type="button" className={ this.props.sketchy ? "hidden" : "" }>Submit</button>
       </div>
     );
   }

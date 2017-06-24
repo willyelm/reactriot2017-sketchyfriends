@@ -17,9 +17,9 @@ class Player {
 }
 
 class Room {
-	constructor(CODE, client) {
+	constructor(CODE, player) {
 		this.code = CODE;
-		this.player1 = client;
+		this.player1 = player;
 		this.player1.room = this;
 		this.player1.number = 1;
 		this.player1.sketchy = true
@@ -28,16 +28,33 @@ class Room {
 		this.player1.send({ OP: 'CREATE', CODE,  SKETCHY: true });
 	}
 
-	playerJoined(client) {
+	playerJoined(player) {
 		var success = true;
-		// this.player2 = new Player(this, client, 2);
-		this.player2 = client;
+		// this.player2 = new Player(this, player, 2);
+		this.player2 = player;
 		this.player2.number = 2;
 		this.player2.sketchy = false
 		this.player2.room = this;
 
 		this.player2.emit('message', { OP: 'JOIN', success, SKETCHY: false });
 		this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
+	}
+
+	playerSketched(player, data) {
+
+		switch(player) {
+			case this.player1:
+				console.log('player1 drew')
+				this.player2.emit('message', { OP: 'PLAYER_SKETCHED', data });
+				break;
+			case this.player2:
+				console.log('player2 drew')
+				this.player1.emit('message', { OP: 'PLAYER_SKETCHED', data });
+				break;
+			default:
+				break;
+		}
+
 	}
 }
 
@@ -69,7 +86,6 @@ var selectWord = function() {
 	];
 
 	word += words[Math.floor(Math.random() * words.length)];
-	console.log(word)
 	return word;
 }
 
@@ -89,10 +105,11 @@ var game = {
 	},
 	selectWord: function(player) {
 		var WORD = selectWord();
-		console.log(WORD)
-		// send word to sketchy player only?
 		player.emit('message', { OP: 'NEW_WORD', WORD });
 		player.room.player2.emit('message', { OP: 'NEW_WORD', WORD });
+	},
+	playerSketched: function(player, data) {
+		player.room.playerSketched(player, data);
 	}
 }
 
@@ -112,7 +129,6 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('message', function(data) {
-		console.log(data)
 
 		switch(data.OP) {
 
@@ -131,6 +147,12 @@ io.on('connection', function (socket) {
 			case 'START_GAME': {
 				console.log('starting game');
 				game.selectWord(socket);
+				break;
+			}
+
+			case 'PLAYER_SKETCHED': {
+				console.log('updating canvas');
+				game.playerSketched(socket, data.i);
 				break;
 			}
 		}
