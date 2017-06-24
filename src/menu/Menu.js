@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
+import io from 'socket.io-client'
+
+const socket = io.connect(`http://localhost:8000`)
 
 class Menu extends Component {
+
+  componentDidMount() {    
+    socket.on(`server:news`, data => {
+      socket.emit('my other event', { my: 'data' })
+    })
+  }
 
   constructor(props) {
     super(props)
