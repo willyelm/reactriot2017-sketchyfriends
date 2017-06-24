@@ -32,13 +32,6 @@ class Canvas extends Component {
           tool={tool}
         />
         <div style={{float:'left'}}>
-          <div className="tools" style={{marginBottom:20}}>
-            <button
-              style={tool == TOOL_PENCIL ? {fontWeight:'bold'} : undefined}
-              className={tool == TOOL_PENCIL  ? 'item-active' : 'item'}
-              onClick={() => this.setState({tool:TOOL_PENCIL})}
-            >Pencil</button>
-          </div>
           <div className="options" style={{marginBottom:20}}>
             <label htmlFor="">color: </label>
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
