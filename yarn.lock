@@ -4800,7 +4800,7 @@ react-dev-utils@^3.0.0:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
-react-dom@15.6.1:
+"react-dom@^0.14.0 || ^15.0.0", react-dom@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -4863,7 +4863,15 @@ react-scripts@1.0.7:
   optionalDependencies:
     fsevents "1.0.17"
 
-react@15.6.1:
+react-sketchpad@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-sketchpad/-/react-sketchpad-0.0.3.tgz#8c28bedc0491c0c4a96f97c4b1f145d0f33d1ebb"
+  dependencies:
+    react "^0.14.0 || ^15.0.0"
+    react-dom "^0.14.0 || ^15.0.0"
+    uuid "^2.0.0"
+
+"react@^0.14.0 || ^15.0.0", react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:
@@ -5883,7 +5891,7 @@ utils-merge@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.0.tgz#0294fb922bb9375153541c4f7096231f287c8af8"
 
-uuid@^2.0.1, uuid@^2.0.2:
+uuid@^2.0.0, uuid@^2.0.1, uuid@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
