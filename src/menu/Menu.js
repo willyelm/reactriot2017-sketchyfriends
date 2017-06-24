@@ -1,37 +1,39 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import io from 'socket.io-client'
+import { CREATE_ROOM } from '../store';
 
 const socket = io.connect(`http://localhost:8000`)
 
 class Menu extends Component {
 
   componentDidMount() {    
-    socket.on(`server:news`, data => {
-      socket.emit('my other event', { my: 'data' })
-    })
+    
   }
 
   constructor(props) {
     super(props)
 
-    this.state = {
-      input: '',
-    }
+    socket.on(`message`, data => {
+      console.log(data)
+      this.props.create_room(data.CODE);
+      this.props.history.push('/lobby');
+    })
   }
 
   handleChange(e) {
     this.setState({ input: e.target.value });
   }
 
-  handleClick() {
-    
+  startAGame() {
+    socket.emit('message', { OP: 'CREATE' });
   }
 
   render() {
     return (
       <div className="Menu">
         <h1>Sketchy Friends</h1>
-        <button>Start a Game</button>
+        <button type="button" onClick={ this.startAGame.bind(this) }>Start a Game</button>
         <input type="text" />
         <button>Join a Game</button>
       </div>
@@ -39,4 +41,14 @@ class Menu extends Component {
   }
 }
 
-export default Menu;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    create_room: code => {
+      dispatch({ type: CREATE_ROOM, code });
+    }
+  };
+};
+
+const mapStateToProps = (state) => state;
+const ConnectedMenu = connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default ConnectedMenu;

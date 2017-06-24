@@ -1,17 +1,41 @@
 const express = require('express');
-// const bodyParser = require('body-parser');
 const http = require('http')
 const socketServer =require('socket.io')
-
 const app = express();
-
-// app.use(bodyParser.urlencoded({extended:true}))
-// app.use(bodyParser.json())
-
-
 var serve = http.createServer(app);
 var io = socketServer(serve);
 serve.listen(8000,()=> {console.log("server listening on port 8000")})
+
+
+class Room {
+	constructor(CODE, client) {
+		this.code = CODE;
+		this.player1 = client;
+
+		this.player1.send({ OP: 'CREATE', CODE });
+	}
+}
+
+var rooms = {};
+
+var generateCode = function() {
+	var code = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )  {
+        code += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return code;
+}
+
+var game = {
+	rooms,
+	createRoom: function(host) {
+		var code = generateCode();
+		rooms[code] = new Room(code, host);
+	}
+}
 
 
 /***************************************************************************************** */
@@ -19,10 +43,31 @@ serve.listen(8000,()=> {console.log("server listening on port 8000")})
 /***************************************************************************************** */
 const connections = [];
 io.on('connection', function (socket) {
-	console.log("Connected to Socket!!"+ socket.id)	
+
+	console.log("Connected to Socket!!"+ socket.id)
+
 	connections.push(socket)
+
 	socket.on('disconnect', function(){
 		console.log('Disconnected - '+ socket.id);
 	});
+
+	socket.on('message', function(data) {
+		console.log(data)
+
+		switch(data.OP) {
+
+			case 'CREATE': {
+				console.log('create game');
+				game.createRoom(socket);
+				break;
+			}
+
+			case 'JOIN': {
+				console.log('joining game');
+				break;
+			}
+		}
+	})
 	
 });
