@@ -53,9 +53,11 @@ class Menu extends Component {
     return (
       <div className="Menu">
         <h1>Sketchy Friends</h1>
-        <button type="button" onClick={ this.startAGame }>Start a Game</button>
-        <input type="text" placeholder="game code" onChange={ this.handleChange.bind(this) }/>
-        <button type="button" onClick={ this.joinAGame.bind(this) }>Join a Game</button>
+        <div>
+          <button type="button" onClick={ this.startAGame }>Start a Game</button>
+          <input type="text" placeholder="game code" onChange={ this.handleChange.bind(this) }/>
+          <button type="button" onClick={ this.joinAGame.bind(this) }>Join a Game</button>
+        </div>
       </div>
     );
   }

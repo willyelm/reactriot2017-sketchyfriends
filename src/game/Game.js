@@ -16,7 +16,8 @@ class Game extends Component {
       sketchy: this.props.sketchy,
       points: 0,
       opponent_points: 0,
-      time: null
+      time: null,
+      chatHistory: []
     }
     this.count = 3;
 
@@ -81,48 +82,57 @@ class Game extends Component {
     this.setState({ gameCountDown: this.count });
   }
 
-  handleChange(e) {
-    this.setState({ input: e.target.value });
-  }
+  // checkAnswer(e) {
+  //   this.setState({ input: e.target.value });
+  // }
 
-  checkAnswer() {
-    if(this.state.input.toLowerCase() === this.state.word) {
-      this.props.socket.emit('message', {  OP: 'CORRECT_ANSWER' });
+  checkAnswer(e) {
+    if (e.key === 'Enter') {
+      console.log(e.target.value)
+      if(e.target.value.toLowerCase() === this.state.word && !this.state.sketchy) {
+        this.props.socket.emit('message', {  OP: 'CORRECT_ANSWER' });
+      }
     }
   }
 
   render() {
     return (
       <div className="Game">
-        <h1>Sketchy Friends</h1>
-        <div className={ this.state.gameCountDown === null ? "hidden" : "" }>
+        <div className="game-header">
+          <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
+          <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
+        </div>
+        
+        <div className={ this.state.gameCountDown === null ? "modal hidden" : "modal" }>
           <p>Game starts in { this.state.gameCountDown }</p>
         </div>
-        <div className={ this.state.time === null ? "hidden" : "" }>
+        <div className={ this.state.time === null ? "modal hidden" : "modal" }>
           <p>{ this.state.time }</p>
         </div>
-        <div className={ this.state.goodDraw ? "" : "hidden" }>
+        <div className={ this.state.goodDraw ? "modal" : "modal hidden" }>
           <p>You're an artist!</p>
         </div>
-        <div className={ this.state.correctAnswer ? "" : "hidden" }>
+        <div className={ this.state.correctAnswer ? "modal" : "modal hidden" }>
           <p>You got it!</p>
         </div>
 
-        <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
-        <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
-        <div>
+        <div className="players">
           <div>
             <p>Player 1</p>
-            <p>{ this.state.points }</p>
+            <p>{ this.state.points } PTS</p>
           </div>
           <div>
             <p>Player 2</p>
-            <p>{ this.state.opponent_points }</p>
+            <p>{ this.state.opponent_points } PTS</p>
           </div>
         </div>
         <Canvas />
-        <input type="text" onChange={ this.handleChange.bind(this) } className={ this.state.sketchy ? "hidden" : "" }/>
-        <button onClick={ this.checkAnswer.bind(this) } type="button" className={ this.state.sketchy ? "hidden" : "" }>Submit</button>
+
+        <div className="chat">
+          <div className="chat-history">
+          </div>
+          <input type="text" className={ this.state.sketchy ? "hidden" : "" } onKeyPress={ this.checkAnswer.bind(this) }/>
+        </div>
       </div>
     );
   }

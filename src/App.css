@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
+
+html,body,.content,.App {
+  height: 100%;
+}
+
+h1 {
+  font-family: 'Cabin Sketch', cursive;
+  font-size: 50px;
+}
+
+#root {
+  background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
+  height: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -24,9 +40,151 @@
 }
 
 .canvas {
-  border: 1px solid black;
+  /*width: 100%;*/
+  height: 500px;
 }
 
 .hidden {
   display: none;
+}
+
+.Menu div {
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #FFFFFF;
+  width: 300px;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.Menu button,
+.Menu input {
+  display: block;
+  width: 100%;
+  border: 2px solid #E1E1E1;
+  padding: 10px;
+  background-color: #FFFFFF;
+  margin: 10px;
+  border-radius: 5px;
+  font-family: 'Cabin Sketch', cursive;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+
+button:hover {
+  background-color: #D0ECE5;
+  border-color: #D0ECE5;
+  color: #FFFFFF;
+}
+
+button {
+  transition: ease 0.2s all;
+  cursor: pointer;
+}
+.Lobby {
+  height: 100%;
+  position: relative;
+}
+.lobby-content {
+  background-color: #FFFFFF;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.code {
+  color: #A5CDF5;
+  margin: 0 auto;
+  font-family: 'Cabin Sketch', cursive;
+  font-weight: bold;
+  background-color: #FEF89A;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 2px rgba(0,0,0,0.19), 0 2px 2px rgba(0,0,0,0.23);
+  width: 50%;
+  font-size: 50px;
+}
+
+/*GAME*/
+.Game {
+  height: 100%;
+  box-sizing: border-box;
+  content: "";
+  /*display: table;*/
+  clear: both;
+  padding-top: 50px;
+}
+
+.game-header {
+  background-color: #FEF89A;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  width: 300px;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  right: 45%;
+  font-family: 'Cabin Sketch', cursive;
+}
+.players, .Canvas, .chat {
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 5px;
+  background-color: #FFFFFF;
+  margin: 5px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.players {
+  width: 10%;
+  text-align: left;
+  padding: 20px;
+  height: auto;
+}
+
+.players div {
+  /*padding: 20px;*/
+  border-top: 2px solid #E1E1E1;
+}
+
+.Canvas {
+  /*width: 50%;*/
+  /*padding: 20px;*/
+}
+
+.chat {
+  width: 20%;
+  height: 500px;
+  padding: 20px;
+}
+.chat-history {
+  height: 90%;
+  width: 100%;
+  overflow-y: scroll;
+  border: 2px solid #E1E1E1;
+  border-radius: 5px;
+}
+.chat input {
+  width: 100%;
+  height: 30px;
+  border-radius: 5px;
+  border: 2px solid #E1E1E1;
+}
+
+.modal {
+  background-color: #FEF89A;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  font-family: 'Cabin Sketch', cursive;
 }
