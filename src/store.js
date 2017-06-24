@@ -5,6 +5,7 @@ export const JOIN_ROOM = 'JOIN_ROOM';
 export const SET_NEW_WORD = 'SET_NEW_WORD';
 export const SET_SOCKET = 'SET_SOCKET';
 export const DRAW_POINTS = 'DRAW_POINTS';
+export const SET_SKETCHY_FRIEND = 'SET_SKETCHY_FRIEND';
 
 const initialState = {
   room: null,
@@ -41,6 +42,9 @@ export const store = createStore((state = initialState, action) => {
       return state;
     case `${SET_NEW_WORD}`:
       state.word = action.word;
+      return state;
+    case `${SET_SKETCHY_FRIEND}`:
+      state.sketchy = action.sketchy;
       return state;
     default:
       return state;

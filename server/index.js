@@ -44,17 +44,29 @@ class Room {
 
 		switch(player) {
 			case this.player1:
-				console.log('player1 drew')
 				this.player2.emit('message', { OP: 'PLAYER_SKETCHED', data });
 				break;
 			case this.player2:
-				console.log('player2 drew')
 				this.player1.emit('message', { OP: 'PLAYER_SKETCHED', data });
 				break;
 			default:
 				break;
 		}
 
+	}
+
+	emitNewWord(player, WORD) {
+		this.player1.emit('message', { OP: 'NEW_WORD', WORD });
+		this.player2.emit('message', { OP: 'NEW_WORD', WORD });
+	}
+
+	setSketchyPersion(player) {
+		this.player1.sketchy ? false : true;
+		this.player2.sketchy ? false : true;
+		this.player1.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player1.sketchy });
+		this.player2.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player2.sketchy });
+
+		this.emitNewWord(player);
 	}
 }
 
@@ -104,12 +116,14 @@ var game = {
 		rooms[code].playerJoined(opponent);
 	},
 	selectWord: function(player) {
-		var WORD = selectWord();
-		player.emit('message', { OP: 'NEW_WORD', WORD });
-		player.room.player2.emit('message', { OP: 'NEW_WORD', WORD });
+		var word = selectWord();
+		player.room.emitNewWord(player, word);
 	},
 	playerSketched: function(player, data) {
 		player.room.playerSketched(player, data);
+	},
+	setSketchyPersion(player) {
+		player.room.setSketchyPersion(player);
 	}
 }
 
@@ -153,6 +167,12 @@ io.on('connection', function (socket) {
 			case 'PLAYER_SKETCHED': {
 				console.log('updating canvas');
 				game.playerSketched(socket, data.i);
+				break;
+			}
+
+			case 'END_ROUND': {
+				console.log('selecting new word');
+				game.setSketchyPersion(socket);
 				break;
 			}
 		}

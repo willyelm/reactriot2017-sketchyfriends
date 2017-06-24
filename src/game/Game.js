@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Canvas from './Canvas';
 import '../App.css';
-import { SET_NEW_WORD } from '../store';
+import { SET_NEW_WORD, SET_SKETCHY_FRIEND } from '../store';
 
 class Game extends Component {
 
@@ -15,12 +15,19 @@ class Game extends Component {
       word: null
     }
     this.count = 3;
+    this.drawCount = 10;
 
     this.props.socket.on('message', data => {
+      console.log(data)
       switch(data.OP) {
         case 'NEW_WORD':
           this.props.set_new_word(data.WORD);
           this.setState({ word: data.WORD });
+          this.drawCount = 10;
+          this.drawCounter = setInterval(this.drawTimer.bind(this), 1000);
+          break;
+        case 'SKETCHY_PLAYER':
+          this.props.set_sketchy_friend(data.SKETCHY)
           break;
         default:
           break;
@@ -46,6 +53,21 @@ class Game extends Component {
     this.setState({ gameCountDown: this.count });
   }
 
+  drawTimer() {
+    this.drawCount=this.drawCount-1;
+    if (this.drawCount <= 0) {
+      clearInterval(this.drawCounter);
+      this.drawCount = null;
+      this.setState({ drawCountDown: this.drawCount });
+      if(!this.props.sketchy) {
+        console.log('round end')
+        this.props.socket.emit('message', { OP: 'END_ROUND' });
+      }
+      return;
+    }
+    this.setState({ drawCountDown: this.drawCount });
+  }
+
   handleChange(e) {
     this.setState({ input: e.target.value });
   }
@@ -63,6 +85,9 @@ class Game extends Component {
         <div className={ this.state.gameCountDown === null ? "hidden" : "" }>
           <p>Game starts in { this.state.gameCountDown }</p>
         </div>
+        <div className={ this.state.drawCountDown === null ? "hidden" : "" }>
+          <p>{ this.state.drawCountDown }</p>
+        </div>
         <p className={ this.props.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
         <p className={ this.props.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         <Canvas />
@@ -78,6 +103,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     set_new_word: word => {
       dispatch({ type: SET_NEW_WORD, word  });
+    },
+    set_sketchy_friend: sketchy => {
+      dispatch({ type: SET_SKETCHY_FRIEND, sketchy  });
     }
   };
 };
