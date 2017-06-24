@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import Game from './Game';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <div className="App">
-        <Game />
+        <div className="container content">
+          { this.props.children }
+        </div>
       </div>
     );
   }

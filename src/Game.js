@@ -8,7 +8,6 @@ class Game extends Component {
 
     this.state = {
       input: '',
-      guess: ''
     }
   }
 
