@@ -13,10 +13,13 @@ class Game extends Component {
       input: '',
       gameCountDown: 3,
       word: null,
-      sketchy: this.props.sketchy
+      sketchy: this.props.sketchy,
+      points: 0,
+      opponent_points: 0
     }
     this.count = 3;
     this.drawCount = 10;
+    this.pauseTimer = false;
 
     this.props.socket.on('message', data => {
       console.log(data)
@@ -24,7 +27,7 @@ class Game extends Component {
         case 'NEW_WORD':
           this.props.set_new_word(data.WORD);
           this.setState({ word: data.WORD });
-          this.drawCount = 10;
+          this.setState({ drawCount: 10 });
           this.drawCounter = setInterval(this.drawTimer.bind(this), 1000);
           break;
         case 'SKETCHY_PLAYER':
@@ -32,6 +35,23 @@ class Game extends Component {
           this.setState({ //why does this need to be done if props are being dispatched? 
             sketchy: data.SKETCHY
           });
+          break;
+        case 'GOOD_DRAW':
+          this.setState({
+            points: data.POINTS,
+            opponent_points: data.OPPONENT_POINTS
+          });
+          this.goodDraw = true;
+          setTimeout(() => {
+            this.props.socket.emit('message', { OP: 'END_ROUND' });
+          },3000);
+          break;
+        case 'CORRECT_ANSWER':
+          this.setState({
+            points: data.POINTS,
+            opponent_points: data.OPPONENT_POINTS
+          });
+          this.correctAnswer = true;
           break;
         default:
           break;
@@ -58,6 +78,7 @@ class Game extends Component {
   }
 
   drawTimer() {
+    console.log('start timer')
     this.drawCount=this.drawCount-1;
     if (this.drawCount <= 0) {
       clearInterval(this.drawCounter);
@@ -78,7 +99,8 @@ class Game extends Component {
 
   checkAnswer() {
     if(this.state.input.toLowerCase() === this.state.word) {
-      console.log('correct')
+      this.props.socket.emit('message', {  OP: 'CORRECT_ANSWER' });
+      clearInterval(this.drawCounter);
     }
   }
 
@@ -92,10 +114,26 @@ class Game extends Component {
         <div className={ this.state.drawCountDown === null ? "hidden" : "" }>
           <p>{ this.state.drawCountDown }</p>
         </div>
+        <div className={ this.state.goodDraw ? "" : "hidden" }>
+          <p>You're an artist!</p>
+        </div>
+        <div className={ this.state.correctAnswer ? "" : "hidden" }>
+          <p>You got it!</p>
+        </div>
+
         <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
         <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
+        <div>
+          <div>
+            <p>Player 1</p>
+            <p>{ this.state.points }</p>
+          </div>
+          <div>
+            <p>Player 2</p>
+            <p>{ this.state.opponent_points }</p>
+          </div>
+        </div>
         <Canvas />
-        <p>{ this.state.guess }</p>
         <input type="text" onChange={ this.handleChange.bind(this) } className={ this.state.sketchy ? "hidden" : "" }/>
         <button onClick={ this.checkAnswer.bind(this) } type="button" className={ this.state.sketchy ? "hidden" : "" }>Submit</button>
       </div>

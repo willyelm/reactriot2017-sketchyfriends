@@ -6,15 +6,20 @@ var serve = http.createServer(app);
 var io = socketServer(serve);
 serve.listen(8000,()=> {console.log("server listening on port 8000")})
 
-class Player {
+// TODO: move classes into seperate directories
 
-	constructor(room, client, playerNumber) {
-		this.client = client;
-		this.client.room = room;
-		this.room = room;
-		this.playerNumber = playerNumber;
-	}
-}
+// class Player {
+
+// 	constructor(room, client, playerNumber) {
+// 		this.client = client;
+// 		this.client.room = room;
+// 		this.room = room;
+// 		this.playerNumber = playerNumber;
+// 	}
+// }
+
+var correctAnswer = 5;
+var goodDraw = 2;
 
 class Room {
 	constructor(CODE, player) {
@@ -24,6 +29,7 @@ class Room {
 		this.player1.number = 1;
 		this.player1.sketchy = true
 		this.player2 = null;
+		this.player1.points = 0;
 
 		this.player1.send({ OP: 'CREATE', CODE,  SKETCHY: true });
 	}
@@ -34,6 +40,7 @@ class Room {
 		this.player2 = player;
 		this.player2.number = 2;
 		this.player2.sketchy = false
+		this.player2.points = 0;
 		this.player2.room = this;
 
 		this.player2.emit('message', { OP: 'JOIN', success, SKETCHY: false });
@@ -65,6 +72,26 @@ class Room {
 		this.player2.sketchy = this.player2.sketchy ? false : true;
 		this.player1.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player1.sketchy });
 		this.player2.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player2.sketchy });
+	}
+
+	givePoints(player) {
+
+		switch(player) {
+			case this.player1:
+				this.player1.points += correctAnswer;
+				this.player2.points += goodDraw;
+				this.player1.emit('message', { OP: 'CORRECT_ANSWER', POINTS: this.player1.points, OPPONENT_POINTS: this.player2.points });
+				this.player2.emit('message', { OP: 'GOOD_DRAW', POINTS: this.player2.points, OPPONENT_POINTS: this.player1.points });
+				break;
+			case this.player2:
+				this.player2.points += correctAnswer;
+				this.player1.points += goodDraw;
+				this.player2.emit('message', { OP: 'CORRECT_ANSWER', POINTS: this.player2.points, OPPONENT_POINTS: this.player1.points });
+				this.player1.emit('message', { OP: 'GOOD_DRAW', POINTS: this.player1.points, OPPONENT_POINTS: this.player2.points });
+				break;
+			default:
+				break;
+		}
 	}
 }
 
@@ -123,6 +150,9 @@ var game = {
 	setSketchyPerson(player) {
 		player.room.setSketchyPerson(player);
 		this.selectWord(player);
+	},
+	givePoints(player) {
+		player.room.givePoints(player);
 	}
 }
 
@@ -173,6 +203,11 @@ io.on('connection', function (socket) {
 				console.log('selecting new word');
 				game.setSketchyPerson(socket);
 				break;
+			}
+
+			case 'CORRECT_ANSWER': {
+				console.log('correct answer');
+				game.givePoints(socket);
 			}
 		}
 	})
