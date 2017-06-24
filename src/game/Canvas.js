@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SketchPad, TOOL_PENCIL, TOOL_LINE, TOOL_RECTANGLE, TOOL_ELLIPSE } from '../../node_modules/react-sketchpad/lib/index';
+import { SketchPad, TOOL_PENCIL } from '../../node_modules/react-sketchpad/lib/index';
 
 class Canvas extends Component {
 
@@ -36,16 +36,7 @@ class Canvas extends Component {
             <label htmlFor="">color: </label>
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />
           </div>
-          {(this.state.tool == TOOL_ELLIPSE || this.state.tool == TOOL_RECTANGLE) ?
-            <div>
-              <label htmlFor="">fill in:</label>
-              <input type="checkbox" value={fill} style={{margin:'0 8'}}
-                     onChange={(e) => this.setState({fill: e.target.checked})} />
-              {fill ? <span>
-                  <label htmlFor="">with color:</label>
-                  <input type="color" value={fillColor} onChange={(e) => this.setState({fillColor: e.target.value})} />
-                </span> : ''}
-            </div> : ''}
+          
         </div>
       </div>
     );

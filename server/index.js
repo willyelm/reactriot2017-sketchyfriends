@@ -20,10 +20,12 @@ class Room {
 	constructor(CODE, client) {
 		this.code = CODE;
 		this.player1 = client;
-		console.log(this.player1)
+		this.player1.room = this;
+		this.player1.number = 1;
+		this.player1.sketchy = true
 		this.player2 = null;
 
-		this.player1.send({ OP: 'CREATE', CODE });
+		this.player1.send({ OP: 'CREATE', CODE,  SKETCHY: true });
 	}
 
 	playerJoined(client) {
@@ -31,8 +33,10 @@ class Room {
 		// this.player2 = new Player(this, client, 2);
 		this.player2 = client;
 		this.player2.number = 2;
+		this.player2.sketchy = false
 		this.player2.room = this;
-		this.player2.emit('message', { OP: 'JOIN', success });
+
+		this.player2.emit('message', { OP: 'JOIN', success, SKETCHY: false });
 		this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
 	}
 }
@@ -43,11 +47,30 @@ var generateCode = function() {
 	var code = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 5; i++ )  {
+    for(var i=0; i < 5; i++)  {
         code += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
     return code;
+}
+
+var selectWord = function() {
+	var word = "";
+	var words = [
+		"cat",
+		"dog",
+		"bird",
+		"plane",
+		"superman",
+		"boat",
+		"car",
+		"stormtrooper",
+		"beer"
+	];
+
+	word += words[Math.floor(Math.random() * words.length)];
+	console.log(word)
+	return word;
 }
 
 var game = {
@@ -63,6 +86,13 @@ var game = {
 			opponent.send({ OP: 'JOIN', success, reason });
 		}
 		rooms[code].playerJoined(opponent);
+	},
+	selectWord: function(player) {
+		var WORD = selectWord();
+		console.log(WORD)
+		// send word to sketchy player only?
+		player.emit('message', { OP: 'NEW_WORD', WORD });
+		player.room.player2.emit('message', { OP: 'NEW_WORD', WORD });
 	}
 }
 
@@ -95,6 +125,12 @@ io.on('connection', function (socket) {
 			case 'JOIN': {
 				console.log('joining game');
 				game.joinRoom(socket, data.code);
+				break;
+			}
+
+			case 'START_GAME': {
+				console.log('starting game');
+				game.selectWord(socket);
 				break;
 			}
 		}
