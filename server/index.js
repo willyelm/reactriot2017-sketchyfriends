@@ -60,13 +60,11 @@ class Room {
 		this.player2.emit('message', { OP: 'NEW_WORD', WORD });
 	}
 
-	setSketchyPersion(player) {
-		this.player1.sketchy ? false : true;
-		this.player2.sketchy ? false : true;
+	setSketchyPerson(player) {
+		this.player1.sketchy = this.player1.sketchy ? false : true;
+		this.player2.sketchy = this.player2.sketchy ? false : true;
 		this.player1.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player1.sketchy });
 		this.player2.emit('message', { OP: 'SKETCHY_PLAYER', SKETCHY: this.player2.sketchy });
-
-		this.emitNewWord(player);
 	}
 }
 
@@ -122,8 +120,9 @@ var game = {
 	playerSketched: function(player, data) {
 		player.room.playerSketched(player, data);
 	},
-	setSketchyPersion(player) {
-		player.room.setSketchyPersion(player);
+	setSketchyPerson(player) {
+		player.room.setSketchyPerson(player);
+		this.selectWord(player);
 	}
 }
 
@@ -172,7 +171,7 @@ io.on('connection', function (socket) {
 
 			case 'END_ROUND': {
 				console.log('selecting new word');
-				game.setSketchyPersion(socket);
+				game.setSketchyPerson(socket);
 				break;
 			}
 		}

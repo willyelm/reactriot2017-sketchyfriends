@@ -12,7 +12,8 @@ class Game extends Component {
     this.state = {
       input: '',
       gameCountDown: 3,
-      word: null
+      word: null,
+      sketchy: this.props.sketchy
     }
     this.count = 3;
     this.drawCount = 10;
@@ -27,7 +28,10 @@ class Game extends Component {
           this.drawCounter = setInterval(this.drawTimer.bind(this), 1000);
           break;
         case 'SKETCHY_PLAYER':
-          this.props.set_sketchy_friend(data.SKETCHY)
+          this.props.set_sketchy_friend(data.SKETCHY);
+          this.setState({ //why does this need to be done if props are being dispatched? 
+            sketchy: data.SKETCHY
+          });
           break;
         default:
           break;
@@ -88,12 +92,12 @@ class Game extends Component {
         <div className={ this.state.drawCountDown === null ? "hidden" : "" }>
           <p>{ this.state.drawCountDown }</p>
         </div>
-        <p className={ this.props.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
-        <p className={ this.props.sketchy ? "hidden" : "" }>Guess the secret word!</p>
+        <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
+        <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         <Canvas />
         <p>{ this.state.guess }</p>
-        <input type="text" onChange={ this.handleChange.bind(this) } className={ this.props.sketchy ? "hidden" : "" }/>
-        <button onClick={ this.checkAnswer.bind(this) } type="button" className={ this.props.sketchy ? "hidden" : "" }>Submit</button>
+        <input type="text" onChange={ this.handleChange.bind(this) } className={ this.state.sketchy ? "hidden" : "" }/>
+        <button onClick={ this.checkAnswer.bind(this) } type="button" className={ this.state.sketchy ? "hidden" : "" }>Submit</button>
       </div>
     );
   }
