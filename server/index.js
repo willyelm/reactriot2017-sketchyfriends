@@ -4,7 +4,7 @@ const socketServer =require('socket.io')
 const app = express();
 var serve = http.createServer(app);
 var io = socketServer(serve);
-var PORT = process.env.PORT || 3000
+var PORT = process.env.PORT || 8000
 serve.listen(PORT,()=> {console.log("server listening on port " + PORT)})
 
 // TODO: move classes into seperate directories
