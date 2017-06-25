@@ -176,6 +176,10 @@ class Game extends Component {
           <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
           <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         </div>
+
+        <div className={ this.state.time <= 5 ? "timer warning" : "timer" }>
+          <p>{ this.state.time === null ? 20 : this.state.time }</p>
+        </div>
         
         <div className={ this.state.gameCountDown === null ? "modal hidden" : "modal" }>
           <p>Game starts in { this.state.gameCountDown }</p>

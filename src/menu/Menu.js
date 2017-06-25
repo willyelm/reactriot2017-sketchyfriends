@@ -27,7 +27,6 @@ class Menu extends Component {
           break;
         case 'JOIN':
           if(data.SUCCESS) {
-            console.log('joining room')
             this.props.join_room(data);
             this.props.history.push('/game');
           } else {

@@ -99,7 +99,7 @@ class Room {
 			this.round++
 			this.player1.emit('message', { OP: 'NEW_WORD', WORD });
 			this.player2.emit('message', { OP: 'NEW_WORD', WORD });
-			this.count = 20;
+			this.count = 40;
 			this.counter = setInterval(this.timer(player), 1000);
 		}
 	}
@@ -136,8 +136,6 @@ class Room {
 		var PLAYER_NUM = player.playerNumber;
 		var DATA = data;
 
-		console.log(PLAYER_NUM)
-		console.log(DATA)
 		this.player1.emit('message', { OP: 'CHAT', PLAYER_NUM, DATA });
 		this.player2.emit('message', { OP: 'CHAT', PLAYER_NUM, DATA });
 	}
@@ -289,42 +287,35 @@ io.on('connection', function (socket) {
 		switch(data.OP) {
 
 			case 'CREATE': {
-				console.log('create game');
 				game.createRoom(socket);
 				break;
 			}
 
 			case 'JOIN': {
-				console.log('joining game');
 				game.joinRoom(socket, data.code);
 				break;
 			}
 
 			case 'START_GAME': {
-				console.log('starting game');
 				game.selectWord(socket);
 				break;
 			}
 
 			case 'PLAYER_SKETCHED': {
-				console.log('updating canvas');
 				game.playerSketched(socket, data.i);
 				break;
 			}
 
 			case 'END_ROUND': {
-				console.log('selecting new word');
 				game.setSketchyPerson(socket);
 				break;
 			}
 
 			case 'CORRECT_ANSWER': {
-				console.log('correct answer');
 				game.givePoints(socket);
 			}
 
 			case 'CHAT': {
-				console.log('chat');
 				game.pushToChat(socket, data.value);
 			}
 		}

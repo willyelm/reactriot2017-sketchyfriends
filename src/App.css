@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 html,body,.content,.App {
   height: 100%;
   background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
+  font-family: 'Open Sans', sans-serif;
 }
 
 h1 {
@@ -122,6 +124,7 @@ button {
   /*display: table;*/
   clear: both;
   padding-top: 50px;
+  /*cursor: pointer;*/
 }
 
 .player {
@@ -205,13 +208,16 @@ input.guess::placeholder {
   background-color: #FFFFFF;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
   position: absolute;
-  top: -50px;
   border: 10px solid #A7A7A7;
   color: #A7A7A7;
+  top: 0;
   font-size: 30px;
-  right: -50px;
+  right: 0;
+}
+
+.timer p {
+  pointer-events: none;
 }
 
 .timer.warning {
