@@ -18,8 +18,13 @@
   "devDependencies": {
     "react-scripts": "1.0.7"
   },
+  "engines": {
+    "node": "7.4.0",
+    "npm": "4.2.0"
+  },
   "scripts": {
     "build": "react-scripts build",
+    "dev": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start": "node server/index.js"
