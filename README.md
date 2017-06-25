@@ -1,4 +1,5 @@
 # Sketchy Friends
+a realtime game built with React.
 Draw something awesome and make your friend guess. Player with the most points wins!
 
 ![Sketchy Friends](/sketchyfriends.gif?raw=true "Sketchy Friends")
