@@ -47,7 +47,7 @@ class Canvas extends Component {
           onCompleteItem={(i) => this.props.socket.emit('message', { OP: 'PLAYER_SKETCHED', i })}
           disabled={ !this.props.sketchy }
         />
-        <div style={{float:'left'}}>
+        <div style={{float:'left'}} className="hidden">
           <div className="options" style={{marginBottom:20}} className={ this.props.sketchy ? "" : "hidden" }>
             <label htmlFor="">color: </label>
             <input type="color" value={color} onChange={(e) => this.setState({color: e.target.value})} />

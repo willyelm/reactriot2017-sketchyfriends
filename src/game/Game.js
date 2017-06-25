@@ -15,29 +15,30 @@ class Game extends Component {
       word: null,
       sketchy: this.props.sketchy,
       points: 0,
-      opponent_points: 0,
+      opponentPoints: 0,
       time: null,
       chatHistory: []
     }
     this.count = 3;
 
     this.props.socket.on('message', data => {
-      console.log(data)
       switch(data.OP) {
         case 'NEW_WORD':
           this.props.set_new_word(data.WORD);
           this.setState({ word: data.WORD });
+          this.goodDraw = false;
+          this.correctAnswer = false;
           break;
         case 'SKETCHY_PLAYER':
           this.props.set_sketchy_friend(data.SKETCHY);
-          this.setState({ //why does this need to be done if props are being dispatched? 
+          this.setState({
             sketchy: data.SKETCHY
           });
           break;
         case 'GOOD_DRAW':
           this.setState({
             points: data.POINTS,
-            opponent_points: data.OPPONENT_POINTS
+            opponentPoints: data.OPPONENT_POINTS
           });
           this.goodDraw = true;
           setTimeout(() => {
@@ -46,13 +47,31 @@ class Game extends Component {
           break;
         case 'CORRECT_ANSWER':
           this.setState({
-            time: data.TIME
+            points: data.POINTS,
+            opponentPoints: data.OPPONENT_POINTS
           });
           this.correctAnswer = true;
           break;
         case 'TIMER':
           this.setState({
             time: data.TIME,
+          });
+          if(this.state.time === null && this.state.sketchy) {
+            this.props.socket.emit('message', { OP: 'END_ROUND' });
+          }
+          break;
+        case 'CHAT':
+          let player;
+          if(parseInt(data.PLAYER_NUM) === parseInt(this.props.playerNumber)) {
+            player = 'you';
+          } else {
+            player = 'friend';
+          }
+          let chatHistory = this.state.chatHistory;
+          chatHistory.push({ player, message: data.DATA });
+
+          this.setState({
+            chatHistory,
           });
           if(this.state.time === null && this.state.sketchy) {
             this.props.socket.emit('message', { OP: 'END_ROUND' });
@@ -88,10 +107,11 @@ class Game extends Component {
 
   checkAnswer(e) {
     if (e.key === 'Enter') {
-      console.log(e.target.value)
       if(e.target.value.toLowerCase() === this.state.word && !this.state.sketchy) {
-        this.props.socket.emit('message', {  OP: 'CORRECT_ANSWER' });
+        this.props.socket.emit('message', { OP: 'CORRECT_ANSWER' });
       }
+      this.props.socket.emit('message', { OP: 'CHAT', value: e.target.value });
+      e.target.value = '';
     }
   }
 
@@ -106,32 +126,39 @@ class Game extends Component {
         <div className={ this.state.gameCountDown === null ? "modal hidden" : "modal" }>
           <p>Game starts in { this.state.gameCountDown }</p>
         </div>
-        <div className={ this.state.time === null ? "modal hidden" : "modal" }>
-          <p>{ this.state.time }</p>
+        <div className={ this.state.time <= 5 ? "timer warning" : "timer" }>
+          <p>{ this.state.time === null ? 10 : this.state.time }</p>
         </div>
-        <div className={ this.state.goodDraw ? "modal" : "modal hidden" }>
+        <div className={ this.goodDraw ? "modal" : "modal hidden" }>
           <p>You're an artist!</p>
         </div>
-        <div className={ this.state.correctAnswer ? "modal" : "modal hidden" }>
+        <div className={ this.correctAnswer ? "modal" : "modal hidden" }>
           <p>You got it!</p>
         </div>
 
         <div className="players">
           <div>
-            <p>Player 1</p>
+            <p>You</p>
             <p>{ this.state.points } PTS</p>
           </div>
           <div>
-            <p>Player 2</p>
-            <p>{ this.state.opponent_points } PTS</p>
+            <p>Friend</p>
+            <p>{ this.state.opponentPoints } PTS</p>
           </div>
         </div>
         <Canvas />
 
         <div className="chat">
           <div className="chat-history">
+            {
+              (this.state.chatHistory) ?  (
+                this.state.chatHistory.map((data) =>  {
+                  return <p><span className={ data.player }>{ data.player }:</span> { data.message }</p>
+                })
+              ) :  null
+            }
           </div>
-          <input type="text" className={ this.state.sketchy ? "hidden" : "" } onKeyPress={ this.checkAnswer.bind(this) }/>
+          <input type="text" onKeyPress={ this.checkAnswer.bind(this) }/>
         </div>
       </div>
     );

@@ -14,7 +14,7 @@ class Menu extends Component {
   constructor(props) {
     super(props)
     this.input = '';
-    console.log(socket)
+    
     socket.on(`message`, data => {
       console.log(data)
       switch(data.OP) {

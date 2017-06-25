@@ -27,7 +27,7 @@ class Room {
 		this.code = CODE;
 		this.player1 = player;
 		this.player1.room = this;
-		this.player1.number = 1;
+		this.player1.playerNumber = 1;
 		this.player1.sketchy = true
 		this.player2 = null;
 		this.player1.points = 0;
@@ -40,7 +40,7 @@ class Room {
 		var success = true;
 		// this.player2 = new Player(this, player, 2);
 		this.player2 = player;
-		this.player2.number = 2;
+		this.player2.playerNumber = 2;
 		this.player2.sketchy = false
 		this.player2.points = 0;
 		this.player2.room = this;
@@ -99,7 +99,7 @@ class Room {
 
 	givePoints(player) {
 		clearInterval(this.counter);
-		
+
 		switch(player) {
 			case this.player1:
 				this.player1.points += correctAnswer;
@@ -116,6 +116,16 @@ class Room {
 			default:
 				break;
 		}
+	}
+
+	pushToChat(player, data) {
+		var PLAYER_NUM = player.playerNumber;
+		var DATA = data;
+
+		console.log(PLAYER_NUM)
+		console.log(DATA)
+		this.player1.emit('message', { OP: 'CHAT', PLAYER_NUM, DATA });
+		this.player2.emit('message', { OP: 'CHAT', PLAYER_NUM, DATA });
 	}
 
 }
@@ -178,6 +188,9 @@ var game = {
 	},
 	givePoints(player) {
 		player.room.givePoints(player);
+	},
+	pushToChat(player, data) {
+		player.room.pushToChat(player, data);
 	}
 }
 
@@ -233,6 +246,11 @@ io.on('connection', function (socket) {
 			case 'CORRECT_ANSWER': {
 				console.log('correct answer');
 				game.givePoints(socket);
+			}
+
+			case 'CHAT': {
+				console.log('chat');
+				game.pushToChat(socket, data.value);
 			}
 		}
 	})
