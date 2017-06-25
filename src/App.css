@@ -19,6 +19,16 @@ h1 {
   color: #FFFFFF;
 }
 
+.active, .Canvas.active {
+  border: 5px solid #F7AF53;
+}
+
+.Canvas p {
+  color: #F7AF53;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 #root {
   background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
   height: 100%;
@@ -62,6 +72,11 @@ h1 {
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   transform: translateY(50%);
+}
+
+.Menu p {
+  color: #FFFFFF;
+  font-family: 'Cabin Sketch', cursive;
 }
 
 .Menu button,
@@ -151,6 +166,10 @@ button {
   color: #CF8AFF;
 }
 
+.sketchy-word span {
+  color: #000000;
+}
+
 .points-earned {
   background-color: #5AB22A;
   color: #FFFFFF;
@@ -208,6 +227,11 @@ input.guess::placeholder {
   /*width: 50%;*/
   /*padding: 20px;*/
   position: relative;
+  border: 5px solid transparent;
+}
+
+.Canvas {
+  border: 5px solid transparent;
 }
 
 .timer {

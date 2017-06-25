@@ -173,7 +173,7 @@ class Game extends Component {
     return (
       <div className="Game">
         <div className={ this.state.gameOver ? "game-header hidden" : "game-header" }>
-          <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
+          <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }><span>Draw</span> { this.state.word }</p>
           <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         </div>
 
@@ -218,7 +218,7 @@ class Game extends Component {
         </div>
         <GameCanvas timer={ this.state.time } />
 
-        <div className="chat">
+        <div className={ this.state.sketchy ? "chat" : "chat active" }>
           <div className="chat-history">
             {
               (this.state.chatHistory) ?  (

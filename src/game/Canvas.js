@@ -37,8 +37,8 @@ class Canvas extends Component {
     const { tool, size, color, fill, fillColor, items } = this.state;
 
     return (
-      <div className="Canvas">
-
+      <div className={ this.props.sketchy ? "Canvas active" : "Canvas" }>
+        <p className={ this.props.sketchy ? "" : "hidden" }>Draw Here</p>
         <SketchPad
           width={500}
           height={500}
