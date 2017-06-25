@@ -138,11 +138,11 @@ class Game extends Component {
 
         <div className="players">
           <div>
-            <p>You</p>
+            <p className="you">You</p>
             <p>{ this.state.points } PTS</p>
           </div>
           <div>
-            <p>Friend</p>
+            <p className="friend">Friend</p>
             <p>{ this.state.opponentPoints } PTS</p>
           </div>
         </div>

@@ -52,7 +52,7 @@ h1 {
   margin: 0 auto;
   padding: 20px;
   background-color: #FFFFFF;
-  width: 300px;
+  width: 50%;
   text-align: center;
   border-radius: 5px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -70,6 +70,7 @@ h1 {
   font-family: 'Cabin Sketch', cursive;
   text-transform: uppercase;
   font-size: 20px;
+  box-sizing: border-box;
 }
 
 button:hover {
@@ -168,7 +169,7 @@ button {
   border: 10px solid #A7A7A7;
   color: #A7A7A7;
   font-size: 30px;
-  right: 30%;
+  right: 0;
 }
 
 .timer.warning {
@@ -198,11 +199,11 @@ button {
   border: 2px solid #E1E1E1;
 }
 
-span.you {
+.you {
   color: #93C1FB;
 }
 
-span.friend {
+.friend {
   color: #C8E7E8;
 }
 
