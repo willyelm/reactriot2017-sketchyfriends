@@ -193,15 +193,18 @@ class Game extends Component {
         </div>
 
         <div className="players">
-          <p>Round { this.state.round }/5</p>
-          <div className="player">
+          <div className="round">
+            <p>Round { this.state.round }/5</p>
+          </div>
+          <div className={ this.state.sketchy ? "player sketchy-player" : "player" }>
             <p className="you">You</p>
             <p>{ this.state.points } PTS</p>
             <div className={ this.state.showPoints ? "points-earned": "hidden" }>
               <p>{ this.state.pointsEarned }+</p>
             </div>
           </div>
-          <div className="player">
+
+          <div className={ !this.state.sketchy ? "player sketchy-player" : "player" }>
             <p className="friend">Friend</p>
             <p>{ this.state.opponentPoints } PTS</p>
             <div className={ this.state.showPoints ? "points-earned": "hidden" }>
@@ -221,7 +224,7 @@ class Game extends Component {
               ) :  null
             }
           </div>
-          <input type="text" onKeyPress={ this.checkAnswer.bind(this) }/>
+          <input type="text" onKeyPress={ this.checkAnswer.bind(this) } placeholder={ this.state.sketchy ? "" : "Enter answer here"} className={ this.state.sketchy ? "" : "guess"} />
         </div>
       </div>
     );

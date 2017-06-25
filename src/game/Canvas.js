@@ -63,6 +63,7 @@ class Canvas extends Component {
           tool={tool}
           onCompleteItem={(i) => this.props.socket.emit('message', { OP: 'PLAYER_SKETCHED', i })}
         />
+        <div className={ this.props.sketchy ? "hidden" : "sketchpad-overlay" }></div>
         <div style={{float:'left'}} className="hidden">
           <div className="options" style={{marginBottom:20}} className={ this.props.sketchy ? "" : "hidden" }>
             <label htmlFor="">color: </label>
