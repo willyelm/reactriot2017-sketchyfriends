@@ -17,17 +17,19 @@ class Canvas extends Component {
       items: []
     }
 
-    this.props.socket.on('message', data => {
-      switch(data.OP) {
-        case 'PLAYER_SKETCHED':
-          this.setState({
-            items: this.state.items.concat([data.data])
-          });
-          break;
-        default:
-          break;
-      }
-    });
+    if(this.props.socket !== null) {
+      this.props.socket.on('message', data => {
+        switch(data.OP) {
+          case 'PLAYER_SKETCHED':
+            this.setState({
+              items: this.state.items.concat([data.data])
+            });
+            break;
+          default:
+            break;
+        }
+      });
+    }
   }
 
   render() {

@@ -32,6 +32,8 @@ class Room {
 		this.player2 = null;
 		this.player1.points = 0;
 		this.timer;
+		this.maxRounds = 5;
+		this.round = 0;
 
 		this.player1.send({ OP: 'CREATE', CODE,  SKETCHY: true });
 	}
@@ -84,10 +86,16 @@ class Room {
 	}
 
 	emitNewWord(player, WORD) {
-		this.player1.emit('message', { OP: 'NEW_WORD', WORD });
-		this.player2.emit('message', { OP: 'NEW_WORD', WORD });
-		this.count = 10;
-		this.counter = setInterval(this.timer(player), 1000);
+		if(this.round === this.maxRounds) {
+			clearInterval(this.counter);
+			game.endGame(this.player1, this.player2);
+		} else {
+			this.round++
+			this.player1.emit('message', { OP: 'NEW_WORD', WORD });
+			this.player2.emit('message', { OP: 'NEW_WORD', WORD });
+			this.count = 5;
+			this.counter = setInterval(this.timer(player), 1000);
+		}
 	}
 
 	setSketchyPerson(player) {
@@ -247,6 +255,10 @@ var game = {
 	},
 	pushToChat(player, data) {
 		player.room.pushToChat(player, data);
+	},
+	endGame(player1, player2) {
+		player1.emit('message', { OP: 'GAME_OVER' });
+		player2.emit('message', { OP: 'GAME_OVER' });
 	}
 }
 

@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 
 class Lobby extends Component {
 
+  componentDidMount() {
+    if(this.props.code === null) {
+      this.props.history.push('/menu');
+    }
+  }
+
   render() {
     return (
       <div className="Lobby">

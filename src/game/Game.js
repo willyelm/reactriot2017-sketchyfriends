@@ -17,70 +17,99 @@ class Game extends Component {
       points: 0,
       opponentPoints: 0,
       time: null,
-      chatHistory: []
+      chatHistory: [],
+      gameOver: false,
+      round: 0,
+      gameEndMessage: ''
     }
     this.count = 3;
+    if(this.props.socket === null) {
+      this.props.history.push('/menu');
+    } else {
 
-    this.props.socket.on('message', data => {
-      switch(data.OP) {
-        case 'NEW_WORD':
-          this.props.set_new_word(data.WORD);
-          this.setState({ word: data.WORD });
-          this.goodDraw = false;
-          this.correctAnswer = false;
-          break;
-        case 'SKETCHY_PLAYER':
-          this.props.set_sketchy_friend(data.SKETCHY);
-          this.setState({
-            sketchy: data.SKETCHY
-          });
-          break;
-        case 'GOOD_DRAW':
-          this.setState({
-            points: data.POINTS,
-            opponentPoints: data.OPPONENT_POINTS
-          });
-          this.goodDraw = true;
-          setTimeout(() => {
-            this.props.socket.emit('message', { OP: 'END_ROUND' });
-          },3000);
-          break;
-        case 'CORRECT_ANSWER':
-          this.setState({
-            points: data.POINTS,
-            opponentPoints: data.OPPONENT_POINTS
-          });
-          this.correctAnswer = true;
-          break;
-        case 'TIMER':
-          this.setState({
-            time: data.TIME,
-          });
-          if(this.state.time === null && this.state.sketchy) {
-            this.props.socket.emit('message', { OP: 'END_ROUND' });
-          }
-          break;
-        case 'CHAT':
-          let player;
-          if(parseInt(data.PLAYER_NUM) === parseInt(this.props.playerNumber)) {
-            player = 'you';
-          } else {
-            player = 'friend';
-          }
-          let chatHistory = this.state.chatHistory;
-          chatHistory.push({ player, message: data.DATA });
-
-          this.setState({
-            chatHistory,
-          });
-          if(this.state.time === null && this.state.sketchy) {
-            this.props.socket.emit('message', { OP: 'END_ROUND' });
-          }
-          break;
-        default:
-          break;
-      }
-    });
+      this.props.socket.on('message', data => {
+        switch(data.OP) {
+          case 'NEW_WORD':
+            this.props.set_new_word(data.WORD);
+            this.setState({ word: data.WORD });
+            this.goodDraw = false;
+            this.correctAnswer = false;
+            this.state.round++;
+            break;
+          case 'SKETCHY_PLAYER':
+            this.props.set_sketchy_friend(data.SKETCHY);
+            this.setState({
+              sketchy: data.SKETCHY
+            });
+            break;
+          case 'GOOD_DRAW':
+            this.setState({
+              points: data.POINTS,
+              opponentPoints: data.OPPONENT_POINTS
+            });
+            this.goodDraw = true;
+            setTimeout(() => {
+              this.props.socket.emit('message', { OP: 'END_ROUND' });
+            },3000);
+            break;
+          case 'CORRECT_ANSWER':
+            this.setState({
+              points: data.POINTS,
+              opponentPoints: data.OPPONENT_POINTS
+            });
+            this.correctAnswer = true;
+            break;
+          case 'TIMER':
+            this.setState({
+              time: data.TIME,
+            });
+            if(this.state.time === null && this.state.sketchy) {
+              this.props.socket.emit('message', { OP: 'END_ROUND' });
+            }
+            break;
+          case 'CHAT':
+            let player;
+            if(parseInt(data.PLAYER_NUM) === parseInt(this.props.playerNumber)) {
+              player = 'you';
+            } else {
+              player = 'friend';
+            }
+            let chatHistory = this.state.chatHistory;
+            chatHistory.push({ player, message: data.DATA });
+  
+            this.setState({
+              chatHistory,
+            });
+            if(this.state.time === null && this.state.sketchy) {
+              this.props.socket.emit('message', { OP: 'END_ROUND' });
+            }
+            break;
+          case 'GAME_OVER':
+            this.setState({
+              gameOver: true
+            });
+ 
+            if(parseInt(this.state.points) > parseInt(this.state.opponentPoints)) {
+              this.setState({
+                gameEndMessage: 'You Win!'
+              });
+            }
+            else if(parseInt(this.state.points) < parseInt(this.state.opponentPoints)) {
+              this.setState({
+                gameEndMessage: 'You lost :('
+              });
+            } 
+            else if(parseInt(this.state.points) === parseInt(this.state.opponentPoints)) {
+              this.setState({
+                gameEndMessage: 'It was a tie!'
+              });
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    }
   }
 
   componentDidMount() {
@@ -107,7 +136,7 @@ class Game extends Component {
 
   checkAnswer(e) {
     if (e.key === 'Enter') {
-      if(e.target.value.toLowerCase() === this.state.word && !this.state.sketchy) {
+      if(e.target.value.toLowerCase() === this.state.word.toLowerCase() && !this.state.sketchy) {
         this.props.socket.emit('message', { OP: 'CORRECT_ANSWER' });
       }
       this.props.socket.emit('message', { OP: 'CHAT', value: e.target.value });
@@ -118,7 +147,7 @@ class Game extends Component {
   render() {
     return (
       <div className="Game">
-        <div className="game-header">
+        <div className={ this.state.gameOver ? "game-header hidden" : "game-header" }>
           <p className={ this.state.sketchy ? "sketchy-word" : "sketchy-word hidden" }>{ this.state.word }</p>
           <p className={ this.state.sketchy ? "hidden" : "" }>Guess the secret word!</p>
         </div>
@@ -135,8 +164,13 @@ class Game extends Component {
         <div className={ this.correctAnswer ? "modal" : "modal hidden" }>
           <p>You got it!</p>
         </div>
+        <div className={ this.state.gameOver ? "modal" : "modal hidden" }>
+          <p>GAME OVER</p>
+          <p>{ this.state.gameEndMessage }</p>
+        </div>
 
         <div className="players">
+          <p>Round { this.state.round }/5</p>
           <div>
             <p className="you">You</p>
             <p>{ this.state.points } PTS</p>
