@@ -40,7 +40,6 @@ class Canvas extends Component {
       <div className={ this.props.sketchy ? "Canvas active" : "Canvas" }>
         <p className={ this.props.sketchy ? "" : "hidden" }>Draw Here</p>
         <SketchPad
-          width={500}
           height={500}
           animate={true}
           size={size}

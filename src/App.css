@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-body,.content,.App {
+html,body,.content,.App {
   height: 100%;
   background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
   font-family: 'Open Sans', sans-serif;
@@ -89,7 +89,6 @@ h1 {
   margin: 10px;
   border-radius: 20px;
   font-family: 'Cabin Sketch', cursive;
-  text-transform: uppercase;
   font-size: 20px;
   box-sizing: border-box;
 }
@@ -98,6 +97,7 @@ button:hover {
   background-color: #D0ECE5;
   border-color: #D0ECE5;
   color: #FFFFFF;
+  text-transform: uppercase;
 }
 
 button {
@@ -200,9 +200,10 @@ input.guess::placeholder {
   padding: 5px;
   position: absolute;
   top: 0;
-  right: 45%;
+  right: 50%;
   font-family: 'Cabin Sketch', cursive;
   z-index: 1;
+  transform: translatex(50%);
 }
 .players, .Canvas, .chat {
   display: inline-block;
@@ -219,12 +220,18 @@ input.guess::placeholder {
   height: auto;
 }
 
+/*@media only screen  and (min-width : 1055px) {
+  .players, .Canvas, .chat {
+    display: inline-block;
+  }
+} */
+
 .players div {
   border-top: 2px solid #E1E1E1;
 }
 
 .Canvas {
-  /*width: 50%;*/
+  width: 40%;
   /*padding: 20px;*/
   position: relative;
   border: 5px solid transparent;
