@@ -2,6 +2,7 @@
   "name": "sketchy-friends",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "http://localhost:3000/",
   "dependencies": {
     "express": "^4.15.3",
     "react": "^15.6.1",
@@ -28,6 +29,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start": "node server/index.js"
-  },
-  "postinstall": "react-scripts build"
+  }
 }
