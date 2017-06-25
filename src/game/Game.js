@@ -23,6 +23,7 @@ class Game extends Component {
       gameEndMessage: ''
     }
     this.count = 3;
+    
     if(this.props.socket === null) {
       this.props.history.push('/menu');
     } else {
@@ -129,10 +130,6 @@ class Game extends Component {
     }
     this.setState({ gameCountDown: this.count });
   }
-
-  // checkAnswer(e) {
-  //   this.setState({ input: e.target.value });
-  // }
 
   checkAnswer(e) {
     if (e.key === 'Enter') {

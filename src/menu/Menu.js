@@ -14,17 +14,33 @@ class Menu extends Component {
   constructor(props) {
     super(props)
     this.input = '';
-    
+    this.state = {
+      displayError: false,
+      error: ''
+    }
+
     socket.on(`message`, data => {
-      console.log(data)
       switch(data.OP) {
         case 'CREATE':
           this.props.create_room(data);
           this.props.history.push('/lobby');
           break;
         case 'JOIN':
-          this.props.join_room(data);
-          this.props.history.push('/game');
+          if(data.SUCCESS) {
+            console.log('joining room')
+            this.props.join_room(data);
+            this.props.history.push('/game');
+          } else {
+            this.setState({
+              displayError: true,
+              error: data.REASON
+            });
+            setTimeout(() => {
+              this.setState({
+                displayError: false
+              });
+            },3000)
+          }
           break;
         case 'PLAYER2_JOINED':
           this.props.history.push('/game');
@@ -53,6 +69,7 @@ class Menu extends Component {
     return (
       <div className="Menu">
         <h1>Sketchy Friends</h1>
+        <p className={ this.state.displayError ? "warning" : "warning hidden"}>{ this.state.error }</p>
         <div>
           <button type="button" onClick={ this.startAGame }>Start a Game</button>
           <input type="text" placeholder="game code" onChange={ this.handleChange.bind(this) }/>

@@ -19,7 +19,7 @@ serve.listen(8000,()=> {console.log("server listening on port 8000")})
 // }
 
 var correctAnswer = 5;
-var goodDraw = 2;
+var goodDraw = 1;
 var TIME;
 
 class Room {
@@ -39,16 +39,22 @@ class Room {
 	}
 
 	playerJoined(player) {
-		var success = true;
-		// this.player2 = new Player(this, player, 2);
-		this.player2 = player;
-		this.player2.playerNumber = 2;
-		this.player2.sketchy = false
-		this.player2.points = 0;
-		this.player2.room = this;
-
-		this.player2.emit('message', { OP: 'JOIN', success, SKETCHY: false });
-		this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
+		if(this.player2 === null) {
+			var SUCCESS = true;
+			// this.player2 = new Player(this, player, 2);
+			this.player2 = player;
+			this.player2.playerNumber = 2;
+			this.player2.sketchy = false
+			this.player2.points = 0;
+			this.player2.room = this;
+	
+			this.player2.emit('message', { OP: 'JOIN', SUCCESS, SKETCHY: false });
+			this.player1.emit('message', { OP: 'PLAYER2_JOINED' });
+		} else {
+			var SUCCESS = false;
+			var REASON = 'Room is full';
+			player.emit('message', { OP: 'JOIN', SUCCESS, REASON });
+		}
 	}
 
 	timer(player) {
@@ -233,11 +239,12 @@ var game = {
 	},
 	joinRoom: function(opponent, code) {
 		if(!rooms.hasOwnProperty(code)) {
-			var success = false;
-			var reason = 'Room ' + code + ' does not exist.';
-			opponent.send({ OP: 'JOIN', success, reason });
+			var SUCCESS = false;
+			var REASON = 'Room ' + code + ' does not exist.';
+			opponent.send({ OP: 'JOIN', SUCCESS, REASON });
+		} else {
+			rooms[code].playerJoined(opponent);
 		}
-		rooms[code].playerJoined(opponent);
 	},
 	selectWord: function(player) {
 		var word = selectWord();

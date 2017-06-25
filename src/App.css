@@ -177,6 +177,10 @@ button {
   color: #BE4444;
 }
 
+.warning {
+  color: #BE4444;
+}
+
 .chat {
   width: 20%;
   height: 500px;
