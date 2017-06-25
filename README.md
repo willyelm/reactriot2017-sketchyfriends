@@ -1,5 +1,5 @@
 # Sketchy Friends
-a realtime game built with React.
+a realtime game built with React. ( Desktop Only )
 Draw something awesome and make your friend guess. Player with the most points wins!
 
 ![Sketchy Friends](/sketchyfriends.gif?raw=true "Sketchy Friends")
@@ -22,4 +22,4 @@ Draw something awesome and make your friend guess. Player with the most points w
 In another terminal window:
 `yarn run dev`
 
-open your broswer up to `localhost:3000`
+open your broswer up to `localhost:3000
