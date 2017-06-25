@@ -20,10 +20,12 @@ class Game extends Component {
       chatHistory: [],
       gameOver: false,
       round: 0,
-      gameEndMessage: ''
+      gameEndMessage: '',
+      canvas: () =>  <Canvas />
     }
+
     this.count = 3;
-    
+
     if(this.props.socket === null) {
       this.props.history.push('/menu');
     } else {
@@ -36,6 +38,7 @@ class Game extends Component {
             this.goodDraw = false;
             this.correctAnswer = false;
             this.state.round++;
+            this.newCanvas();
             break;
           case 'SKETCHY_PLAYER':
             this.props.set_sketchy_friend(data.SKETCHY);
@@ -113,6 +116,12 @@ class Game extends Component {
     }
   }
 
+  newCanvas() {
+    this.setState({
+      canvas: () => <Canvas />
+    });
+  }
+
   componentDidMount() {
     this.counter=setInterval(this.timer.bind(this), 1000);
   }
@@ -142,6 +151,8 @@ class Game extends Component {
   }
 
   render() {
+    const GameCanvas = this.state.canvas;
+
     return (
       <div className="Game">
         <div className={ this.state.gameOver ? "game-header hidden" : "game-header" }>
@@ -177,7 +188,7 @@ class Game extends Component {
             <p>{ this.state.opponentPoints } PTS</p>
           </div>
         </div>
-        <Canvas />
+        <GameCanvas />
 
         <div className="chat">
           <div className="chat-history">

@@ -14,7 +14,8 @@ class Canvas extends Component {
       color: '#000000',
       fill: false,
       fillColor: '#444444',
-      items: []
+      items: [],
+      initial: []
     }
 
     if(this.props.socket !== null) {
@@ -47,7 +48,6 @@ class Canvas extends Component {
           items={items}
           tool={tool}
           onCompleteItem={(i) => this.props.socket.emit('message', { OP: 'PLAYER_SKETCHED', i })}
-          disabled={ !this.props.sketchy }
         />
         <div style={{float:'left'}} className="hidden">
           <div className="options" style={{marginBottom:20}} className={ this.props.sketchy ? "" : "hidden" }>
