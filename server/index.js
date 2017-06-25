@@ -18,7 +18,7 @@ serve.listen(8000,()=> {console.log("server listening on port 8000")})
 // 	}
 // }
 
-var correctAnswer = 5;
+var correctAnswer = 3;
 var goodDraw = 1;
 var TIME;
 
@@ -99,7 +99,7 @@ class Room {
 			this.round++
 			this.player1.emit('message', { OP: 'NEW_WORD', WORD });
 			this.player2.emit('message', { OP: 'NEW_WORD', WORD });
-			this.count = 5;
+			this.count = 20;
 			this.counter = setInterval(this.timer(player), 1000);
 		}
 	}

@@ -2,11 +2,13 @@
 
 html,body,.content,.App {
   height: 100%;
+  background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
 }
 
 h1 {
   font-family: 'Cabin Sketch', cursive;
   font-size: 50px;
+  color: #FFFFFF;
 }
 
 #root {
@@ -16,11 +18,6 @@ h1 {
 
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
 }
 
 .App-header {
@@ -56,6 +53,7 @@ h1 {
   text-align: center;
   border-radius: 5px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  transform: translateY(50%);
 }
 
 .Menu button,
@@ -122,6 +120,26 @@ button {
   padding-top: 50px;
 }
 
+.player {
+  position: relative;
+}
+
+.points-earned {
+  background-color: #5AB22A;
+  color: #FFFFFF;
+  border-top: none;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border: none !important;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  border-radius: 50%;
+  right: 0;
+  font-size: 14px;
+}
+
 .game-header {
   background-color: #FEF89A;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
@@ -131,6 +149,7 @@ button {
   top: 0;
   right: 45%;
   font-family: 'Cabin Sketch', cursive;
+  z-index: 1;
 }
 .players, .Canvas, .chat {
   display: inline-block;
@@ -149,13 +168,13 @@ button {
 }
 
 .players div {
-  /*padding: 20px;*/
   border-top: 2px solid #E1E1E1;
 }
 
 .Canvas {
   /*width: 50%;*/
   /*padding: 20px;*/
+  position: relative;
 }
 
 .timer {
@@ -164,12 +183,11 @@ button {
   height: 100px;
   border-radius: 50%;
   position: absolute;
-  top: 0;
-  /*box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);*/
+  top: -50px;
   border: 10px solid #A7A7A7;
   color: #A7A7A7;
   font-size: 30px;
-  right: 0;
+  right: -50px;
 }
 
 .timer.warning {
@@ -217,9 +235,70 @@ button {
   padding: 20px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
   font-family: 'Cabin Sketch', cursive;
+  z-index: 1;
+}
+
+.colors {
+  background-color: #FFFFFF;
+  position: fixed;
+  top: 0;
+}
+.black {
+  width: 50px;
+  height: 50px;
+  background-color: #000000;
+  display: block;
+}
+.white {
+  width: 50px;
+  height: 50px;
+  background-color: #FFFFFF;
+  display: block;
+}
+.red {
+  width: 50px;
+  height: 50px;
+  background-color: #EB1C24;
+  display: block;
+}
+.orange {
+  width: 50px;
+  height: 50px;
+  background-color: #F98518;
+  display: block;
+}
+.yellow {
+  width: 50px;
+  height: 50px;
+  background-color: #F9DD1B;
+  display: block;
+}
+.green {
+  width: 50px;
+  height: 50px;
+  background-color: #A1DD30;
+  display: block;
+}
+.blue {
+  width: 50px;
+  height: 50px;
+  background-color: #0080EA;
+  display: block;
+}
+.purple {
+  width: 50px;
+  height: 50px;
+  background-color: #A539A8;
+  display: block;
+}
+.brown {
+  width: 50px;
+  height: 50px;
+  background-color: #623710;
+  display: block;
 }

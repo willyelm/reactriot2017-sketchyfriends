@@ -72,8 +72,9 @@ class Menu extends Component {
         <p className={ this.state.displayError ? "warning" : "warning hidden"}>{ this.state.error }</p>
         <div>
           <button type="button" onClick={ this.startAGame }>Start a Game</button>
-          <input type="text" placeholder="game code" onChange={ this.handleChange.bind(this) }/>
-          <button type="button" onClick={ this.joinAGame.bind(this) }>Join a Game</button>
+          <p>or</p>
+          <input type="text" placeholder="enter game code" onChange={ this.handleChange.bind(this) }/>
+          <button type="button" onClick={ this.joinAGame.bind(this) }>Join Game</button>
         </div>
       </div>
     );

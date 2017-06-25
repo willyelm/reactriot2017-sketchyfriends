@@ -21,6 +21,7 @@ class Game extends Component {
       gameOver: false,
       round: 0,
       gameEndMessage: '',
+      showPoints: false,
       canvas: () =>  <Canvas />
     }
 
@@ -52,15 +53,31 @@ class Game extends Component {
               opponentPoints: data.OPPONENT_POINTS
             });
             this.goodDraw = true;
+            this.setState({
+              pointsEarned: 1,
+              opponentPointsEarned: 3,
+              showPoints: true
+            });
             setTimeout(() => {
+              this.setState({
+                showPoints: false
+              });
               this.props.socket.emit('message', { OP: 'END_ROUND' });
             },3000);
             break;
           case 'CORRECT_ANSWER':
             this.setState({
               points: data.POINTS,
-              opponentPoints: data.OPPONENT_POINTS
+              opponentPoints: data.OPPONENT_POINTS,
+              pointsEarned: 3,
+              opponentPointsEarned: 1,
+              showPoints: true
             });
+            setTimeout(() => {
+              this.setState({
+                showPoints: false
+              });
+            },3000);
             this.correctAnswer = true;
             break;
           case 'TIMER':
@@ -163,9 +180,7 @@ class Game extends Component {
         <div className={ this.state.gameCountDown === null ? "modal hidden" : "modal" }>
           <p>Game starts in { this.state.gameCountDown }</p>
         </div>
-        <div className={ this.state.time <= 5 ? "timer warning" : "timer" }>
-          <p>{ this.state.time === null ? 10 : this.state.time }</p>
-        </div>
+        
         <div className={ this.goodDraw ? "modal" : "modal hidden" }>
           <p>You're an artist!</p>
         </div>
@@ -179,16 +194,22 @@ class Game extends Component {
 
         <div className="players">
           <p>Round { this.state.round }/5</p>
-          <div>
+          <div className="player">
             <p className="you">You</p>
             <p>{ this.state.points } PTS</p>
+            <div className={ this.state.showPoints ? "points-earned": "hidden" }>
+              <p>{ this.state.pointsEarned }+</p>
+            </div>
           </div>
-          <div>
+          <div className="player">
             <p className="friend">Friend</p>
             <p>{ this.state.opponentPoints } PTS</p>
+            <div className={ this.state.showPoints ? "points-earned": "hidden" }>
+              <p>{ this.state.opponentPointsEarned }+</p>
+            </div>
           </div>
         </div>
-        <GameCanvas />
+        <GameCanvas timer={ this.state.time } />
 
         <div className="chat">
           <div className="chat-history">
