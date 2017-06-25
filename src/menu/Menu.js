@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import io from 'socket.io-client'
 import { CREATE_ROOM, JOIN_ROOM, SET_SOCKET } from '../store';
 
-const socket = io()
+const socket = io();
 
 class Menu extends Component {
 

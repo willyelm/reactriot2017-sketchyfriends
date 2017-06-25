@@ -1,10 +1,21 @@
 const express = require('express');
-const http = require('http')
-const socketServer =require('socket.io')
-const app = express();
-var serve = http.createServer(app);
-var io = socketServer(serve);
-serve.listen(8000,()=> {console.log("server listening on port 8000")})
+// const http = require('http')
+const path = require('path');
+// const socketServer =require('socket.io')
+// const app = express();
+const INDEX = path.join(__dirname, '../build/index.html');
+// var serve = http.createServer(app);
+// var io = socketServer(serve);
+
+const socketIO = require('socket.io');
+
+const PORT = process.env.PORT || 3000;
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+const io = socketIO(server);
 
 // TODO: move classes into seperate directories
 
