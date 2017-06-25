@@ -7,6 +7,12 @@ html,body,.content,.App {
   font-family: 'Open Sans', sans-serif;
 }
 
+#hackbit-vote-widget {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 h1 {
   font-family: 'Cabin Sketch', cursive;
   font-size: 50px;
