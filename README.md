@@ -2,7 +2,7 @@
 a realtime game built with React. ( Desktop Only )
 Draw something awesome and make your friend guess. Player with the most points wins!
 
-![Sketchy Friends](/sketchyfriends.gif?raw=true "Sketchy Friends")
+![Sketchy Friends](/sketchy.gif?raw=true "Sketchy Friends")
 
 - bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 - [NodeJS](https://github.com/nodejs/node) + [Socket.io](https://github.com/socketio/socket.io)
