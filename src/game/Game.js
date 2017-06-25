@@ -28,7 +28,7 @@ class Game extends Component {
     this.count = 3;
 
     if(this.props.socket === null) {
-      this.props.history.push('/menu');
+      this.props.history.push('/');
     } else {
 
       this.props.socket.on('message', data => {

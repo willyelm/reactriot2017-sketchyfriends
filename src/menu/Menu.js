@@ -9,6 +9,7 @@ class Menu extends Component {
 
   componentDidMount() {
     this.props.set_socket(socket);
+
   }
 
   constructor(props) {
@@ -64,18 +65,20 @@ class Menu extends Component {
   }
 
   render() {
-
+    const currentPath = window.location.pathname;
     return (
-      <div className="Menu">
-        <h1>Sketchy Friends</h1>
-        <p className={ this.state.displayError ? "warning" : "warning hidden"}>{ this.state.error }</p>
-        <div>
-          <button type="button" onClick={ this.startAGame }>Start a Game</button>
-          <p>or</p>
-          <input type="text" placeholder="enter game code" onChange={ this.handleChange.bind(this) }/>
-          <button type="button" onClick={ this.joinAGame.bind(this) }>Join Game</button>
-        </div>
-      </div>
+        (currentPath === '/') ?  (
+          <div className="Menu">
+            <h1>Sketchy Friends</h1>
+            <p className={ this.state.displayError ? "warning" : "warning hidden"}>{ this.state.error }</p>
+            <div>
+              <button type="button" onClick={ this.startAGame }>Start a Game</button>
+              <p>or</p>
+              <input type="text" placeholder="enter game code" onChange={ this.handleChange.bind(this) }/>
+              <button type="button" onClick={ this.joinAGame.bind(this) }>Join Game</button>
+            </div>
+          </div>
+        ) : null
     );
   }
 }

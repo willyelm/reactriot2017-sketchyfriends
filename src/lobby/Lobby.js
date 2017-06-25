@@ -5,7 +5,7 @@ class Lobby extends Component {
 
   componentDidMount() {
     if(this.props.code === null) {
-      this.props.history.push('/menu');
+      this.props.history.push('/');
     }
   }
 

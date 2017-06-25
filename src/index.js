@@ -13,8 +13,8 @@ import { Provider } from 'react-redux'
 ReactDOM.render(
   <Provider store={ store }>
   	<BrowserRouter>
-    	<App path="/">
-    	  <Route path="/menu" component={Menu} />
+    	<App>
+    	  <Route path="/" component={Menu} />
     	  <Route path="/lobby" component={Lobby}/>
     	  <Route path="/game" component={Game}/>
     	</App>
