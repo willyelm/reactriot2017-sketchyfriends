@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin+Sketch');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html,body,.content,.App {
+body,.content,.App {
   height: 100%;
   background: linear-gradient( 45deg, #EAFFDB, #8ABAFF );
   font-family: 'Open Sans', sans-serif;
