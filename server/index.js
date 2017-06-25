@@ -17,10 +17,6 @@ const server = express()
 
 const io = socketIO(server);
 
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
 
 // TODO: move classes into seperate directories
 
